@@ -10,6 +10,16 @@ raw_mnist <- mnist_dataset(root, download = TRUE)
 class(raw_mnist)
 length(raw_mnist)
 
+# 1 - 0
+# 2 - 1
+# 3 - 2
+# 4 - 3
+# .
+# 6 - 5
+# .
+# 9 - 8
+# 10 - 9
+
 raw_mnist[1]
 str(raw_mnist[[1]])
 plot(as.raster(raw_mnist[1]$x, max = 255))
@@ -25,6 +35,8 @@ transform <- function(x) {
     # transforma a estrutra de matrix 28x28 em um vetor de tamanho 784
     torch_flatten()
 }
+
+train_ds[1]
 
 train_ds <- mnist_dataset(root, transform = transform, download = TRUE)
 length(train_ds)
@@ -51,6 +63,8 @@ net <- nn_module(
       self$linear3()
   }
 )
+
+net(784, 10)
 
 # fit with luz ------------------------------------------------------------
 
