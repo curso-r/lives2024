@@ -11,7 +11,7 @@ ui <- bslib::page_navbar(
   ),
   bslib::nav_panel(
     title = "Página 2",
-    bslib::page_sidebar(
+    bslib::layout_sidebar(
       sidebar = bslib::sidebar(
         selectInput(
           inputId = "variavel",
