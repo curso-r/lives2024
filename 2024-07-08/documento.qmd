@@ -1,0 +1,31 @@
+---
+title: "HTMLWidgets para tabelas"
+format: html
+---
+
+## reactable
+
+```{r}
+mtcars |> 
+  knitr::kable()
+```
+
+
+```{r}
+# reactable::reactable(mtcars)
+mtcars |> 
+  reactable::reactable(
+    pagination = TRUE,
+    defaultPageSize = 8,
+    striped = TRUE
+  )
+```
+
+
+## DT
+
+```{r}
+mtcars |> 
+  DT::datatable()
+```
+
