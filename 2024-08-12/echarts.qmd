@@ -1,0 +1,40 @@
+---
+title: "echarts"
+format: html
+---
+
+
+```{r}
+dados <- pokemon::pokemon_ptbr |> tibble::as_tibble()
+dados
+
+# ggplot2::geom_abline()
+```
+
+
+```{r}
+dados |>
+  dplyr::filter(
+    id_geracao %in% 1:4
+  ) |>
+  dplyr::mutate(
+    ataque_final = (ataque + ataque_especial) / 2,
+    defesa_final = (defesa + defesa_especial) / 2
+  ) |>
+  echarts4r::e_chart(x = defesa_final) |>
+  echarts4r::e_scatter(
+    serie = ataque_final,
+    markLine = list(
+      data = list(
+        list(
+          list(coord = c(0, 0), symbol = "none"),
+          list(coord = c(150, 150), symbol = "none")
+        )
+      )
+    )
+  ) |> 
+    echarts4r::e_color(color = "white") |> 
+    echarts4r::e_tooltip(
+        formatter = "{a}/{b}"
+    )
+```
