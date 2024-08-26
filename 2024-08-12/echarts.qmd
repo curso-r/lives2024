@@ -7,10 +7,25 @@ format: html
 ```{r}
 dados <- pokemon::pokemon_ptbr |> tibble::as_tibble()
 dados
-
-# ggplot2::geom_abline()
 ```
 
+
+```{r}
+custom_tooltip <- function(e, trigger = c("item", "axis"), ...) 
+{
+    if (missing(e)) {
+        stop("must pass e", call. = FALSE)
+    }
+    tooltip <- list(trigger = trigger[1], ...)
+    if (!e$x$tl) {
+        e$x$opts$tooltip <- tooltip
+    }
+    else {
+        e$x$opts$baseOption$tooltip <- tooltip
+    }
+    e
+}
+```
 
 ```{r}
 dados |>
@@ -32,9 +47,43 @@ dados |>
         )
       )
     )
-  ) |> 
-    echarts4r::e_color(color = "white") |> 
-    echarts4r::e_tooltip(
-        formatter = "{a}/{b}"
+  ) |>
+  echarts4r::e_color(color = "white") |>
+  custom_tooltip(
+    formatter = htmlwidgets::JS(
+      "function(params) {
+        let text = '<b>Defesa</b>: ' + params.value[0];
+        text += '<br>';
+        text += '<b>Ataque</b>: ' + params.value[1];
+        text += '<br><br>';
+        text += '<img src =\"https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/images/001.png\" width = 50px style = \"display: block; margin: auto;\">';
+        return text;
+      }
+    ")
+  )
+```
+
+
+```{r}
+opcoes <- list(
+  xAxis = list(
+    type = "value"
+  ),
+  yAxis = list(
+    type = "value"
+  ),
+  series = list(
+    list(
+      symbolSize = 20,
+      type = "scatter",
+      data = list(
+        list(10, 8.04),
+        list(20, 2.04)
+      )
     )
+  )
+)
+
+echarts4r::e_charts() |> 
+  echarts4r::e_list(opcoes)
 ```
