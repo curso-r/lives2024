@@ -1,0 +1,1 @@
+Son utilisation est très simple : préparez simplement vos fichiers de traduction dans l'un des formats pris en charge, lisez-les dans votre application à l'aide de l'interface conviviale shiny.i18n et entourez vos expressions à traduire par une balise de traduction. Grâce à cela, votre application restera propre et lisible.
