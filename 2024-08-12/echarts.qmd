@@ -11,19 +11,17 @@ dados
 
 
 ```{r}
-custom_tooltip <- function(e, trigger = c("item", "axis"), ...) 
-{
-    if (missing(e)) {
-        stop("must pass e", call. = FALSE)
-    }
-    tooltip <- list(trigger = trigger[1], ...)
-    if (!e$x$tl) {
-        e$x$opts$tooltip <- tooltip
-    }
-    else {
-        e$x$opts$baseOption$tooltip <- tooltip
-    }
-    e
+custom_tooltip <- function(e, trigger = c("item", "axis"), ...) {
+  if (missing(e)) {
+    stop("must pass e", call. = FALSE)
+  }
+  tooltip <- list(trigger = trigger[1], ...)
+  if (!e$x$tl) {
+    e$x$opts$tooltip <- tooltip
+  } else {
+    e$x$opts$baseOption$tooltip <- tooltip
+  }
+  e
 }
 ```
 
@@ -59,12 +57,33 @@ dados |>
         text += '<img src =\"https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/images/001.png\" width = 50px style = \"display: block; margin: auto;\">';
         return text;
       }
-    ")
+    "
+    )
   )
 ```
 
 
 ```{r}
+tab <- dados |>
+  dplyr::filter(
+    id_geracao %in% 1:4
+  ) |>
+  dplyr::mutate(
+    ataque_final = (ataque + ataque_especial) / 2,
+    defesa_final = (defesa + defesa_especial) / 2
+  )
+
+data <- purrr::pmap(
+  list(
+    x = tab$defesa_final,
+    y = tab$ataque_final,
+    imagem = tab$url_imagem,
+    nome = tab$pokemon,
+    cor = tab$cor_1
+  ),
+  \(x, y, imagem, nome, cor) list(x, y, imagem, nome, cor)
+)
+
 opcoes <- list(
   xAxis = list(
     type = "value"
@@ -74,16 +93,143 @@ opcoes <- list(
   ),
   series = list(
     list(
-      symbolSize = 20,
+      symbolSize = 5,
       type = "scatter",
-      data = list(
-        list(10, 8.04),
-        list(20, 2.04)
+      data = data,
+      markLine = list(
+        data = list(
+          list(
+            list(coord = c(0, 0), symbol = "none"),
+            list(coord = c(150, 150), symbol = "none")
+          )
+        ),
+        lineStyle = list(
+          color = "white"
+        )
       )
+    )
+  ),
+  tooltip = list(
+    formatter = htmlwidgets::JS(
+      "function(params) {
+        let text = '<p style = \"text-align: center; color:' + params.value[4] + '\">' + params.value[3] +'</p>';
+        text += '<img src =\"' + params.value[2] + '\" width = 50px style = \"display: block; margin: auto;\"><br>';
+        text += '<b>Defesa</b>: ' + params.value[0];
+        text += '<br>';
+        text += '<b>Ataque</b>: ' + params.value[1];
+        return text;
+      }
+    "
     )
   )
 )
 
-echarts4r::e_charts() |> 
+echarts4r::e_charts() |>
   echarts4r::e_list(opcoes)
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- rascunho -->
+
+
+```{r}
+tab <- dados |>
+  dplyr::filter(
+    id_geracao %in% 1:4
+  ) |>
+  dplyr::mutate(
+    ataque_final = (ataque + ataque_especial) / 2,
+    defesa_final = (defesa + defesa_especial) / 2
+  )
+
+data <- purrr::pmap(
+  list(
+    x = tab$defesa_final,
+    y = tab$ataque_final,
+    url = tab$url_imagem
+  ),
+  \(x, y, url) list(x, y, url)
+)
+
+opcoes <- list(
+  xAxis = list(
+    type = "value"
+  ),
+  yAxis = list(
+    type = "value"
+  ),
+  series = list(
+    list(
+      symbolSize = 5,
+      type = "scatter",
+      markLine = list(
+        data = list(
+          list(
+            list(coord = c(0, 0), symbol = "none"),
+            list(coord = c(150, 150), symbol = "none")
+          )
+        ),
+        lineStyle = list(
+          color = "white"
+        )
+      ),
+      data = data
+    )
+  ),
+  tooltip = list(
+    formatter = htmlwidgets::JS(
+      "function(params) {
+        let text = '<b>Defesa</b>: ' + params.value[0];
+        text += '<br>';
+        text += '<b>Ataque</b>: ' + params.value[1];
+        text += '<br><br>';
+        text += '<img src =\"' + params.value[2] + '\" width = 50px style = \"display: block; margin: auto;\">';
+        return text;
+      }
+    "
+    )
+  )
+)
+
+echarts4r::e_charts() |>
+  echarts4r::e_list(opcoes)
+```
+
+
