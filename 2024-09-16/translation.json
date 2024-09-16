@@ -1,0 +1,24 @@
+{
+    "languages": [
+        "br",
+        "en",
+        "fr"
+    ],
+    "translation": [
+        {
+            "br": "Shiny com i18n",
+            "en": "Shiny with i18n",
+            "fr": "Shiny avec i18n"
+        },
+        {
+            "br": "Escolha o idioma",
+            "en": "Select the language",
+            "fr": "Choisissez le langage"
+        },
+        {
+            "br": "Exemplo",
+            "en": "Example",
+            "fr": "Exemple"
+        }
+    ]
+}

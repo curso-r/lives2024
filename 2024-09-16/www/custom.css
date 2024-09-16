@@ -1,0 +1,9 @@
+.lang-option {
+  font-size: 13px;
+  cursor: pointer;
+  opacity: 0.45;
+}
+
+.lang-active {
+  opacity: 1;
+}
