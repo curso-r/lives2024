@@ -1,7 +1,7 @@
 library(shiny)
 
 i18n <- shiny.i18n::Translator$new(
-  translation_json_path = here::here("2024-09-16/translation.json")
+  translation_json_path = here::here("2024-09-23/translation.json")
 )
 i18n$set_translation_language("br")
 
@@ -11,7 +11,7 @@ ui <- tagList(
     title = i18n$t("Shiny com i18n"),
     bslib::nav_panel(
       tags$head(
-        tags$link(rel = "stylesheet", href = "custom.css")
+        tags$link(rel = "stylesheet", href = system.file("custom.css", "shinyi18nWidget"))
       ),
       title = i18n$t("Exemplo"),
       uiOutput("desc"),
@@ -19,25 +19,9 @@ ui <- tagList(
     ),
     bslib::nav_spacer(),
     bslib::nav_item(
-      tagList(
-        span(
-          class = "lang-option lang-active",
-          "PT",
-          onclick = "Shiny.setInputValue('idioma', 'br')"
-        ),
-        span(" | "),
-        span(
-          class = "lang-option",
-          "EN",
-          onclick = "Shiny.setInputValue('idioma', 'en')"
-        ),
-        span(" | "),
-        span(
-          class = "lang-option",
-          "FR",
-          onclick = "Shiny.setInputValue('idioma', 'fr')"
-        ),
-        tags$script(src = "script.js")
+      shinyi18nWidget::i18nInput(
+        inputId = "idioma",
+        choices = c("PT" = "br", "EN" = "en", "FR" = "fr")
       )
     )
   )
