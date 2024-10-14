@@ -12,7 +12,13 @@ ui <- tagList(
     bslib::nav_panel(
       title = i18n$t("Exemplo"),
       uiOutput("desc"),
-      plotOutput("grafico")
+      plotOutput("grafico"),
+      hr(),
+      selectInput(
+        inputId = "atualizar_idioma",
+        label = "Mudar idioma",
+        choices = c("Escolha..." = "", "PT" = "br", "EN" = "en", "FR" = "fr")
+      )
     ),
     bslib::nav_spacer(),
     bslib::nav_item(
@@ -40,6 +46,15 @@ server <- function(input, output, session) {
     }
   })
 
+  observe({
+    req(input$atualizar_idioma)
+    shinyi18nWidget::updateI18nInput(
+      session,
+      inputId = "idioma",
+      selected = input$atualizar_idioma
+    )
+  })
+
   output$desc <- renderUI({
     includeMarkdown(
       here::here(glue::glue("2024-09-30/md/desc_{idioma()}.md"))
@@ -47,7 +62,6 @@ server <- function(input, output, session) {
   })
 
   output$grafico <- renderPlot({
-    print(input$idioma)
     plot(1:10, main = i18n$t("Shiny com i18n"))
   })
 }
