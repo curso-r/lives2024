@@ -68,15 +68,14 @@ origem |>
   )
 
 url <- paste0(
-  "http://router.project-osrm.org/route/v1/driving/",
+  "http://router.project-osrm.org/route/v1/car/",
   origem$long,
   ",",
   origem$lat,
   ";",
   destino$long,
   ",",
-  destino$lat,
-  "?overview=full"
+  destino$lat
 )
 
 rota <- rjson::fromJSON(file = url)
