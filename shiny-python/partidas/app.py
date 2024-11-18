@@ -1,4 +1,5 @@
 from shiny import App, render, ui, reactive
+from pathlib import Path
 import pandas as pd
 
 def calcular_gols(placar, mando):
@@ -25,9 +26,16 @@ matches = matches \
 temporada = matches.season.unique().tolist()
 temporada.sort()
 
+
+css_file = Path(__file__).parent / "css" / "custom.css"
+js_file = Path(__file__).parent / "js" / "script.js"
+
 app_ui = ui.page_navbar(
     ui.nav_panel(
         "Últimas 10 partidas",
+        ui.head_content(
+            ui.include_css(css_file)
+        ),
         ui.layout_sidebar(
             ui.sidebar(
                 ui.input_select(
@@ -46,7 +54,8 @@ app_ui = ui.page_navbar(
                 ui.output_ui(id = "vb_num_gols_pro"),
                 col_widths = 3
             ),
-            ui.output_table(id = "tabela")
+            ui.output_table(id = "tabela"),
+            ui.include_js(path = js_file)
         ),
     ),
     ui.nav_panel(
@@ -107,7 +116,18 @@ def server(input, output, session):
             value = str(gols)
         )
         return vb
-        
+
+    @reactive.effect
+    @reactive.event(input.click_vb_num_gols_pro)
+    def _():
+        modal = ui.modal(
+            ui.TagList("informações extras do modal"),
+            title = "Gols pro",
+            easy_close = True,
+            size = "xl"
+        )
+        ui.modal_show(modal)
+
 
 
 app = App(app_ui, server)
